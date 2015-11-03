@@ -73,7 +73,7 @@ if(WIN32)
 		
 		#installer rules. 
 		install(TARGETS LaserScanner
-			DESTINATION bin COMPONENT binary_eng_utils)
+			DESTINATION bin COMPONENT binary_laser_scanner)
 			
 		 install(FILES
         ${Qt5Core_DIR}/../../../bin/libEGL.dll
@@ -88,7 +88,24 @@ if(WIN32)
 		${Qt5Core_DIR}/../../../bin/Qt5Widgets.dll
 		${Qt5Core_DIR}/../../../bin/Qt5Xml.dll
 		${Qt5Core_DIR}/../../../bin/Qt5XmlPatterns.dll
-        DESTINATION bin COMPONENT binary_eng_utils
+		${OpenCV_DIR}/bin/Release/opencv_calib3d300.dll
+		${OpenCV_DIR}/bin/Release/opencv_core300.dll
+		${OpenCV_DIR}/bin/Release/opencv_features2d300.dll
+		${OpenCV_DIR}/bin/Release/opencv_ffmpeg300_64.dll
+		${OpenCV_DIR}/bin/Release/opencv_flann300.dll
+		${OpenCV_DIR}/bin/Release/opencv_highgui300.dll
+		${OpenCV_DIR}/bin/Release/opencv_imgcodecs300.dll
+		${OpenCV_DIR}/bin/Release/opencv_imgproc300.dll
+		${OpenCV_DIR}/bin/Release/opencv_ml300.dll
+		${OpenCV_DIR}/bin/Release/opencv_objdetect300.dll
+		${OpenCV_DIR}/bin/Release/opencv_photo300.dll
+		${OpenCV_DIR}/bin/Release/opencv_shape300.dll
+		${OpenCV_DIR}/bin/Release/opencv_stitching300.dll
+		${OpenCV_DIR}/bin/Release/opencv_superres300.dll
+		${OpenCV_DIR}/bin/Release/opencv_video300.dll
+		${OpenCV_DIR}/bin/Release/opencv_videoio300.dll
+		${OpenCV_DIR}/bin/Release/opencv_videostab300.dll
+        DESTINATION bin COMPONENT binary_laser_scanner
     )
 	else()
 		message(SEND_ERROR "Unsupported Compiler")
@@ -104,7 +121,7 @@ if(WIN32)
 	SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\LaserScanner.exe")
 	SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} LaserScanner")
 	SET(CPACK_NSIS_MODIFY_PATH ON)
-	SET(CPACK_COMPONENTS_ALL binary_eng_utils)
+	SET(CPACK_COMPONENTS_ALL binary_laser_scanner)
 	if (CMAKE_CL_64)
 		set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
 	else (CMAKE_CL_64)
@@ -131,6 +148,24 @@ add_custom_command(TARGET LaserScanner POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll      ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Xmld.dll          ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5XmlPatternsd.dll  ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_calib3d300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_core300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_cudev300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_features2d300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_ffmpeg300_64.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_flann300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_highgui300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_imgcodecs300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_imgproc300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_ml300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_objdetect300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_photo300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_shape300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_stitching300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_superres300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_video300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_videoio300d.dll   ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_videostab300d.dll   ${CMAKE_BINARY_DIR}/Debug
   
   # release version
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/libEGL.dll           ${CMAKE_BINARY_DIR}/Release
@@ -145,6 +180,23 @@ add_custom_command(TARGET LaserScanner POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgets.dll       ${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Xml.dll           ${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5XmlPatterns.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_calib3d300.dll    ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_core300.dll   	 ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_features2d300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_ffmpeg300_64.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_flann300.dll    ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_highgui300.dll  ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_imgcodecs300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_imgproc300.dll  ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_ml300.dll   	 ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_objdetect300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_photo300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_shape300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_stitching300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_superres300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_video300.dll   ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_videoio300.dll ${CMAKE_BINARY_DIR}/Release
+  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_videostab300.dll ${CMAKE_BINARY_DIR}/Release
   
   # Output Message
   COMMENT "Copying Qt binaries from '${Qt5Core_DIR}/../../bin/' to '${CMAKE_BINARY_DIR}'" VERBATIM
