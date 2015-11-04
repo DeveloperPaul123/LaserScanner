@@ -202,3 +202,23 @@ add_custom_command(TARGET LaserScanner POST_BUILD
   COMMENT "Copying Qt binaries from '${Qt5Core_DIR}/../../bin/' to '${CMAKE_BINARY_DIR}'" VERBATIM
 )
 
+#Add target to build documents from visual studio.
+set(DOXYGEN_INPUT ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+set(DOXYGEN_OUTPUT_DIR CACHE PATH "Path for document generation output")
+find_package(Doxygen)
+
+if(DOXYGEN_FOUND)
+	add_custom_command(
+	OUTPUT ${DOXYGEN_OUTPUT_DIR}
+	COMMAND ${CMAKE_COMMAND} -E echo_append "Building docs..."
+	COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+	COMMAND ${CMAKE_COMMAND} -E echo "Done"
+	WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
+
+ADD_CUSTOM_TARGET(Build_Docs
+  COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+  COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+  COMMAND ${CMAKE_COMMAND} -E echo "Done."
+  WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
+
+endif(DOXYGEN_FOUND)
