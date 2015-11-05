@@ -3,7 +3,9 @@
 
 using namespace cv;
 
+#ifndef NO_CAM
 VideoCapture cap(0);
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 	cameraTimer->stop();
+#ifndef NO_CAM
 	cap.release();
+#endif
     delete ui;
 }
 
@@ -30,6 +34,7 @@ MainWindow::~MainWindow()
 * Updates the main image in the gui. 
 */
 void MainWindow::updatePicture() {
+#ifndef NO_CAM
 	cap.read(currentImage);
 	Mat det;
 	cvtColor(currentImage, det, CV_BGR2RGB);
@@ -42,6 +47,7 @@ void MainWindow::updatePicture() {
 	QGraphicsScene *smallScene = new QGraphicsScene;
 	smallScene->addPixmap((QPixmap::fromImage(smaller)));
 	ui->secondaryImage->setScene(smallScene);
+#endif
 }
 
 void MainWindow::onConnectClicked() {

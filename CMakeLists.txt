@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.3)
 set (LASER_SCANNER_VERSION_MAJOR "0")
 set (LASER_SCANNER_VERSION_MINOR "1")
 set (LASER_SCANNER_VERSION_PATCH "0")
-set (ENG_UTILS_VERSION "${LASER_SCANNER_VERSION_MAJOR}.${LASER_SCANNER_VERSION_MINOR}.${LASER_SCANNER_VERSION_PATCH}")
+set (LASER_SCANNER_VERSION "${LASER_SCANNER_VERSION_MAJOR}.${LASER_SCANNER_VERSION_MINOR}.${LASER_SCANNER_VERSION_PATCH}")
 
 #set project name. 
 project(LaserScanner)
@@ -56,12 +56,15 @@ add_executable(LaserScanner WIN32 ${Project_Sources} ${GUI} ${Project_Headers})
 target_link_libraries(LaserScanner GUI ${OpenCV_LIBS} Qt5::SerialPort)
 
 #definitions for debug/release builds. 
-option(ENG_DEBUG "Define if the mirror assembly is motorized." OFF)
-if(ENG_DEBUG)
+option(LASER_SCANNER_DEBUG "Define if you want a debug flag." OFF)
+if(LASER_SCANNER_DEBUG)
 	add_definitions(-DENG_DEBUG)
-else() 
-	add_definitions(-DENG_RELEASE)
-endif(ENG_DEBUG)
+endif(LASER_SCANNER_DEBUG)
+
+option(LASER_SCANNER_NO_CAMERA "Define for building on system with no webcam." OFF)
+if(LASER_SCANNER_NO_CAMERA) 
+	add_definitions(-DNO_CAM)
+endif(LASER_SCANNER_NO_CAMERA)
 
 set(QT_VERSION_MAJOR} "5")
 include(CPACK)
