@@ -22,11 +22,13 @@ set(CMAKE_AUTOUIC ON)
 #set all the project source files. 
 set(Project_Sources 
 	main.cpp 
-	mainwindow.cpp)
+	mainwindow.cpp
+	ImageUtils.cpp)
 
 #set the project headers. 
 set(Project_Headers 
-	mainwindow.h)
+	mainwindow.h
+	ImageUtils.h)
 
 #set project forms
 set(Project_Forms mainwindow.ui)
@@ -37,6 +39,7 @@ find_package(OpenCV REQUIRED )
 find_package(Qt5Core)
 find_package(Qt5Gui)
 find_package(Qt5Widgets)
+find_package(Qt5SerialPort)
 
 #wrap the sources and the ui. 
 QT5_WRAP_CPP(Project_HEADERS_MOC ${Project_Headers})
@@ -50,7 +53,7 @@ target_link_libraries(GUI Qt5::Widgets Qt5::Core Qt5::Gui)
 include_directories(${OpenCV_INCLUDE_DIRS})
 #add other sources, libs and headers as executables. 
 add_executable(LaserScanner WIN32 ${Project_Sources} ${GUI} ${Project_Headers})
-target_link_libraries(LaserScanner GUI ${OpenCV_LIBS})
+target_link_libraries(LaserScanner GUI ${OpenCV_LIBS} Qt5::SerialPort)
 
 #definitions for debug/release builds. 
 option(ENG_DEBUG "Define if the mirror assembly is motorized." OFF)
@@ -88,6 +91,7 @@ if(WIN32)
 		${Qt5Core_DIR}/../../../bin/Qt5Widgets.dll
 		${Qt5Core_DIR}/../../../bin/Qt5Xml.dll
 		${Qt5Core_DIR}/../../../bin/Qt5XmlPatterns.dll
+		${Qt5Core_DIR}/../../../bin/Qt5SerialPort.dll
 		${OpenCV_DIR}/bin/Release/opencv_calib3d300.dll
 		${OpenCV_DIR}/bin/Release/opencv_core300.dll
 		${OpenCV_DIR}/bin/Release/opencv_features2d300.dll
@@ -148,9 +152,9 @@ add_custom_command(TARGET LaserScanner POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll      ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Xmld.dll          ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5XmlPatternsd.dll  ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5SerialPortd.dll	${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_calib3d300d.dll   ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_core300d.dll   ${CMAKE_BINARY_DIR}/Debug
-  COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_cudev300d.dll   ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_features2d300d.dll   ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_ffmpeg300_64.dll   ${CMAKE_BINARY_DIR}/Debug
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Debug/opencv_flann300d.dll   ${CMAKE_BINARY_DIR}/Debug
@@ -180,6 +184,7 @@ add_custom_command(TARGET LaserScanner POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgets.dll       ${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Xml.dll           ${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5XmlPatterns.dll   ${CMAKE_BINARY_DIR}/Release
+   COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5SerialPort.dll	${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_calib3d300.dll    ${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_core300.dll   	 ${CMAKE_BINARY_DIR}/Release
   COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_DIR}/bin/Release/opencv_features2d300.dll   ${CMAKE_BINARY_DIR}/Release
@@ -208,14 +213,8 @@ set(DOXYGEN_OUTPUT_DIR CACHE PATH "Path for document generation output")
 find_package(Doxygen)
 
 if(DOXYGEN_FOUND)
-	add_custom_command(
-	OUTPUT ${DOXYGEN_OUTPUT_DIR}
-	COMMAND ${CMAKE_COMMAND} -E echo_append "Building docs..."
-	COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-	COMMAND ${CMAKE_COMMAND} -E echo "Done"
-	WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
 
-ADD_CUSTOM_TARGET(Build_Docs
+ADD_CUSTOM_TARGET(DOCUMENTATION
   COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
   COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
   COMMAND ${CMAKE_COMMAND} -E echo "Done."
