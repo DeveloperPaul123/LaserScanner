@@ -13,6 +13,8 @@
 #include "QtSerialPort\qtserialportversion.h"
 #include "qstring.h"
 #include "qiodevice.h"
+#include <string>
+#include "qfiledialog.h"
 
 using namespace cv;
 
@@ -31,7 +33,13 @@ public:
 public slots:
 	void updatePicture();
 	void onConnectClicked();
+	void onMoveClicked();
+	void onSaveImageClicked();
+	void onLoadImageClicked();
+	void onScanClicked();
+	void onLoadScanClicked();
 	void onDataReady();
+
 private:
     Ui::MainWindow *ui;
 	QTimer *cameraTimer;
@@ -40,6 +48,7 @@ private:
 	void lookForSerialPorts();
 	void sendSerialData(QString data);
 	QSerialPort *serialPort;
+	bool scanning;
 };
 
 #endif // MAINWINDOW_H

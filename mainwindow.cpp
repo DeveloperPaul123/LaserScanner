@@ -15,9 +15,16 @@ MainWindow::MainWindow(QWidget *parent) :
 	cameraTimer = new QTimer(this);
 	connect(cameraTimer, SIGNAL(timeout()), this, SLOT(updatePicture()));
 	connect(ui->connectToArduinoButton, SIGNAL(clicked()), this, SLOT(onConnectClicked()));
+	connect(ui->moveButton, SIGNAL(clicked()), this, SLOT(onMoveClicked()));
+	connect(ui->saveImageButton, SIGNAL(clicked()), this, SLOT(onSaveImageClicked()));
+	connect(ui->loadImageButton, SIGNAL(clicked()), this, SLOT(onLoadImageClicked()));
+	connect(ui->scanButton, SIGNAL(clicked()), this, SLOT(onScanClicked()));
+	connect(ui->loadScanButton, SIGNAL(clicked()), this, SLOT(onLoadScanClicked()));
+
+	ui->moveLineEdit->setValidator(new QIntValidator(1, 4000, this));
 	lookForSerialPorts();
 	serialPort = new QSerialPort(this);
-
+	scanning = false;
 	cameraTimer->start(40);
 }
 
@@ -43,10 +50,10 @@ void MainWindow::updatePicture() {
 	scene->addPixmap((QPixmap::fromImage(image)));
 	ui->mainImage->setScene(scene);
 
-	QImage smaller = image.scaled(320, 240, Qt::AspectRatioMode::KeepAspectRatio);
+	/*QImage smaller = image.scaled(320, 240, Qt::AspectRatioMode::KeepAspectRatio);
 	QGraphicsScene *smallScene = new QGraphicsScene;
 	smallScene->addPixmap((QPixmap::fromImage(smaller)));
-	ui->secondaryImage->setScene(smallScene);
+	ui->secondaryImage->setScene(smallScene);*/
 #endif
 }
 
@@ -91,6 +98,34 @@ void MainWindow::onDataReady() {
 	if (serialPort->isOpen()) {
 		QByteArray arr = serialPort->readAll();
 		QString data(arr);
-	
 	}
+}
+
+void MainWindow::onMoveClicked() {
+	QString input = ui->moveLineEdit->text();
+	if (input.length() > 0) {
+		int steps = std::stoi(input.toStdString());
+		if (serialPort->isOpen()) {
+			QByteArray arr;
+			arr.append(QString("S%1E").arg(steps));
+			serialPort->write(arr);
+		}
+	}
+}
+
+void MainWindow::onSaveImageClicked() {
+	
+}
+
+void MainWindow::onLoadImageClicked() {
+	QString fileName = QFileDialog::getOpenFileName(this,
+		tr("Open Image"), "*", tr("Image Files (*.png *.jpg *.bmp)"));
+}
+
+void MainWindow::onScanClicked() {
+
+}
+
+void MainWindow::onLoadScanClicked() {
+
 }
