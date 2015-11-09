@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->loadImageButton, SIGNAL(clicked()), this, SLOT(onLoadImageClicked()));
 	connect(ui->scanButton, SIGNAL(clicked()), this, SLOT(onScanClicked()));
 	connect(ui->loadScanButton, SIGNAL(clicked()), this, SLOT(onLoadScanClicked()));
+	connect(ui->actionCalibration, SIGNAL(triggered()), this, SLOT(onCalibrate()));
 
 	ui->moveLineEdit->setValidator(new QIntValidator(1, 4000, this));
 	lookForSerialPorts();
@@ -57,6 +58,9 @@ void MainWindow::updatePicture() {
 #endif
 }
 
+/**
+* Called when the connect button is clicked. 
+*/
 void MainWindow::onConnectClicked() {
 	/*Mat first = imread("C:\\Users\\Paul\\Documents\\C++Projects\\LaserScanner\\data\\firstPic.png");
 	Mat second = imread("C:\\Users\\Paul\\Documents\\C++Projects\\LaserScanner\\data\\secondPic.png");
@@ -75,9 +79,14 @@ void MainWindow::onConnectClicked() {
 	serialPort->setFlowControl(QSerialPort::NoFlowControl);
 	serialPort->setStopBits(QSerialPort::OneStop);
 	serialPort->open(QIODevice::ReadWrite);
+
 	connect(serialPort, SIGNAL(readyRead()), this, SLOT(onDataReady()));
 }
 
+/**
+* Looks for serial ports and adds their names to the com port
+* combo box. 
+*/
 void MainWindow::lookForSerialPorts() {
 	QStringList list;
 	
@@ -94,6 +103,9 @@ void MainWindow::lookForSerialPorts() {
 	
 }
 
+/**
+* Called when data is ready on the com port from the arduino. 
+*/
 void MainWindow::onDataReady() {
 	if (serialPort->isOpen()) {
 		QByteArray arr = serialPort->readAll();
@@ -101,6 +113,9 @@ void MainWindow::onDataReady() {
 	}
 }
 
+/**
+* Called when the move button is clicked. 
+*/
 void MainWindow::onMoveClicked() {
 	QString input = ui->moveLineEdit->text();
 	if (input.length() > 0) {
@@ -122,10 +137,23 @@ void MainWindow::onLoadImageClicked() {
 		tr("Open Image"), "*", tr("Image Files (*.png *.jpg *.bmp)"));
 }
 
+/**
+* Called when the scan button is clicked. 
+*/
 void MainWindow::onScanClicked() {
 
 }
 
+/**
+* Called when the load button is clicked. 
+*/
 void MainWindow::onLoadScanClicked() {
 
+}
+
+/**
+* Called when calibration is selected from the menu. 
+*/
+void MainWindow::onCalibrate() {
+	
 }

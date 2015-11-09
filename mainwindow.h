@@ -39,6 +39,7 @@ public slots:
 	void onScanClicked();
 	void onLoadScanClicked();
 	void onDataReady();
+	void onCalibrate();
 
 private:
     Ui::MainWindow *ui;
