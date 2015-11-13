@@ -7,6 +7,10 @@ using namespace cv;
 VideoCapture cap(0);
 #endif
 
+/**
+* Main constructor of main window. 
+* @param parent the qwidget parent. 
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -29,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	cameraTimer->start(40);
 }
 
+/**
+* Deconstructor. 
+*/
 MainWindow::~MainWindow()
 {
 	cameraTimer->stop();
@@ -128,10 +135,16 @@ void MainWindow::onMoveClicked() {
 	}
 }
 
+/**
+* Called when save button clicked. 
+*/
 void MainWindow::onSaveImageClicked() {
 	
 }
 
+/**
+* Called when the load image is clicked. 
+*/
 void MainWindow::onLoadImageClicked() {
 	QString fileName = QFileDialog::getOpenFileName(this,
 		tr("Open Image"), "*", tr("Image Files (*.png *.jpg *.bmp)"));
@@ -141,7 +154,17 @@ void MainWindow::onLoadImageClicked() {
 * Called when the scan button is clicked. 
 */
 void MainWindow::onScanClicked() {
-
+	bool ok;
+	QStringList *items = new QStringList();
+	items->append("180");
+	items->append("360");
+	items->append("720");
+	items->append("1440");
+	QString item = QInputDialog::getItem(this, tr("Number of scans"), tr("Number of scans"), *items, 0, false, &ok);
+	if (ok) {
+		//set loop count and start the looping. 
+		loopCount = item.toInt();
+	}
 }
 
 /**

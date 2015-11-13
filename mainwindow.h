@@ -15,6 +15,8 @@
 #include "qiodevice.h"
 #include <string>
 #include "qfiledialog.h"
+#include "qinputdialog.h"
+
 
 using namespace cv;
 
@@ -49,7 +51,11 @@ private:
 	void lookForSerialPorts();
 	void sendSerialData(QString data);
 	QSerialPort *serialPort;
-	bool scanning;
+
+	bool scanning = false;
+	int loopCount = 0;
+	bool laserOn = false;
+	bool moving = false;
 };
 
 #endif // MAINWINDOW_H
