@@ -111,12 +111,40 @@ void MainWindow::lookForSerialPorts() {
 }
 
 /**
+* Write data to the serial port. 
+* @param data the QString to write to the port. 
+*/
+void MainWindow::sendSerialData(QString data) {
+	if (serialPort->isOpen()) {
+		QByteArray arr;
+		arr.append(data);
+		serialPort->write(arr);
+	}
+}
+
+/**
 * Called when data is ready on the com port from the arduino. 
 */
 void MainWindow::onDataReady() {
 	if (serialPort->isOpen()) {
 		QByteArray arr = serialPort->readAll();
 		QString data(arr);
+		//TODO: Do something with the data. 
+		if (scanning) {
+			if (data.compare("D")) {
+				// done moving. 
+			}
+			else if (data.compare("M")) {
+				//moving.
+			}
+			else if (data.compare("Y")) {
+				//laser on
+			}
+			else if (data.compare("U")) {
+				//laser off
+			}
+
+		}
 	}
 }
 
@@ -127,19 +155,66 @@ void MainWindow::onMoveClicked() {
 	QString input = ui->moveLineEdit->text();
 	if (input.length() > 0) {
 		int steps = std::stoi(input.toStdString());
-		if (serialPort->isOpen()) {
+		moveMotor(steps);
+		/*if (serialPort->isOpen()) {
 			QByteArray arr;
 			arr.append(QString("S%1E").arg(steps));
 			serialPort->write(arr);
-		}
+		}*/
 	}
+}
+
+/**
+* Move the motor a given number of steps. 
+* @param steps the number of steps.
+*/
+void MainWindow::moveMotor(int steps) {
+	QString data = QString("S%1E").arg(steps);
+	sendSerialData(data);
+}
+
+/**
+* Send the laser a command to toggle. 
+*/
+void MainWindow::toggleLaser() {
+	sendSerialData(QString("L"));
 }
 
 /**
 * Called when save button clicked. 
 */
 void MainWindow::onSaveImageClicked() {
-	
+	imwrite("C:\\Users\\Paul\\Desktop\\test.tif", currentImage);
+}
+
+void MainWindow::takeLaserImage() {
+	laserImage = currentImage.clone();
+}
+
+void MainWindow::takeNoLaserImage() {
+	noLaserImage = currentImage.clone();
+}
+
+/**
+* Save the difference image. 
+*/
+void MainWindow::saveLaserDifferenceImage() {
+	if (laserImage.size > 0 && noLaserImage.size > 0) {
+		Mat result = ImageUtils::subtractImages(noLaserImage, laserImage);
+		QString name = QString("scan%1.tif").arg(loopCount);
+		//save the image. 
+		//TODO: Save in the current "scan" directory.
+		imwrite(name.toStdString(), result);
+
+		//copy result.
+		Mat det;
+		cvtColor(result, det, CV_BGR2RGB);
+		QImage image((uchar*)det.data, det.cols, det.rows, det.step, QImage::Format_RGB888);
+		QGraphicsScene* scene = new QGraphicsScene;
+		scene->addPixmap((QPixmap::fromImage(image)));
+		//put this in the secondary image. 
+		ui->secondaryImage->setScene(scene);
+	}
 }
 
 /**
@@ -152,6 +227,11 @@ void MainWindow::onLoadImageClicked() {
 
 /**
 * Called when the scan button is clicked. 
+* Order of scaning loop should be:
+*		1) No laser image
+*		2) Laser image
+*		3) Save differnce image.
+*		4) Move to next position -> back to 1)
 */
 void MainWindow::onScanClicked() {
 	bool ok;

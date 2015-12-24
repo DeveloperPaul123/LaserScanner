@@ -47,10 +47,16 @@ private:
     Ui::MainWindow *ui;
 	QTimer *cameraTimer;
 	Mat currentImage;
-	Mat lastImage;
+	Mat laserImage;
+	Mat noLaserImage;
 	void lookForSerialPorts();
 	void sendSerialData(QString data);
 	QSerialPort *serialPort;
+	void toggleLaser();
+	void moveMotor(int steps);
+	void takeNoLaserImage();
+	void takeLaserImage();
+	void saveLaserDifferenceImage();
 
 	bool scanning = false;
 	int loopCount = 0;
